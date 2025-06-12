@@ -5,7 +5,12 @@ import { supabase } from '../lib/supabase';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signUp: (email: string, password: string, userData: { full_name: string; role: string }) => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    userData: { full_name: string; role: string },
+    captchaToken?: string
+  ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resendConfirmationEmail: (email: string) => Promise<void>;
@@ -33,13 +38,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, userData: { full_name: string; role: string }) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    userData: { full_name: string; role: string },
+    captchaToken?: string
+  ) => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: userData,
         emailRedirectTo: 'https://liogi-store.vercel.app',
+        captchaToken, // 🔐 reCAPTCHA token support
       }
     });
     if (error) throw error;
@@ -67,13 +78,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
-      signUp, 
-      signIn, 
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      signUp,
+      signIn,
       signOut,
-      resendConfirmationEmail 
+      resendConfirmationEmail
     }}>
       {!loading && children}
     </AuthContext.Provider>
