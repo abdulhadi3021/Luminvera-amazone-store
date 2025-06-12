@@ -114,6 +114,11 @@ export function Footer() {
                   WhatsApp
                 </a>
 
+                <a href="#" className="flex items-center text-gray-300 hover:text-white">
+  <PlayCircle size={20} className="mr-2" />
+  YouTube
+</a>
+
                 <a 
                   href="mailto:contact@luminvera.com" 
                   aria-label="Email us" 
