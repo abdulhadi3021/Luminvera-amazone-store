@@ -1,27 +1,20 @@
 import React, { useState } from 'react';
 import { Search, ShoppingCart, MapPin, User, Menu, Globe, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 import { useAuth } from '../../../context/AuthContext';
 import { AuthModal } from '../../AuthModal';
+import { SearchBar } from '../../SearchBar/SearchBar';
 import { MAIN_CATEGORIES } from '../../../constants/categories';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   
   const { cart } = useCart();
   const { user, signOut } = useAuth();
-
-  const categories = ['All', ...MAIN_CATEGORIES.slice(1).map(cat => cat.label)];
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Searching for:', searchQuery, 'in category:', selectedCategory);
-  };
+  const navigate = useNavigate();
 
   const handleAuthClick = () => {
     if (user) {
@@ -29,6 +22,27 @@ export function Header() {
     } else {
       setIsAuthModalOpen(true);
     }
+  };
+
+  const handleSearch = (query: string, filters: any) => {
+    const searchParams = new URLSearchParams();
+    searchParams.set('q', query);
+    
+    if (filters.category !== 'All') {
+      searchParams.set('category', filters.category);
+    }
+    if (filters.priceRange !== 'all') {
+      searchParams.set('price', filters.priceRange);
+    }
+    if (filters.rating > 0) {
+      searchParams.set('rating', filters.rating.toString());
+    }
+    if (filters.inStock) {
+      searchParams.set('inStock', 'true');
+    }
+    
+    navigate(`/search?${searchParams.toString()}`);
+    setIsSearchExpanded(false);
   };
 
   const toggleSearch = () => {
@@ -57,32 +71,9 @@ export function Header() {
             </Link>
 
             {/* Desktop Search Bar */}
-            <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-2xl mr-6">
-              <div className="flex w-full">
-                <select 
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="bg-gray-100 text-gray-700 px-3 py-2 rounded-l-md border border-gray-300 text-sm min-w-[120px]"
-                >
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  placeholder="Search products, categories, or brands..."
-                  className="flex-1 px-4 py-2 text-gray-800 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button 
-                  type="submit"
-                  className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-r-md transition-colors"
-                >
-                  <Search size={20} className="text-white" />
-                </button>
-              </div>
-            </form>
+            <div className="hidden md:flex flex-1 max-w-2xl mr-6">
+              <SearchBar onSearch={handleSearch} />
+            </div>
 
             {/* Mobile Search Icon */}
             <button 
@@ -150,37 +141,17 @@ export function Header() {
           {/* Mobile Search Bar - Expandable */}
           {isSearchExpanded && (
             <div className="md:hidden pb-3 border-t border-gray-200 pt-3 mt-3">
-              <form onSubmit={handleSearchSubmit} className="flex">
-                <select 
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="bg-gray-100 text-gray-700 px-2 py-2 rounded-l-md border border-gray-300 text-sm"
-                >
-                  {categories.slice(0, 5).map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="flex-1 px-3 py-2 text-gray-800 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+              <div className="flex items-center">
+                <div className="flex-1">
+                  <SearchBar onSearch={handleSearch} />
+                </div>
                 <button 
-                  type="submit"
-                  className="bg-orange-500 hover:bg-orange-600 px-3 py-2 transition-colors"
-                >
-                  <Search size={18} className="text-white" />
-                </button>
-                <button 
-                  type="button"
                   onClick={toggleSearch}
-                  className="bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-r-md transition-colors"
+                  className="ml-3 p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  <X size={18} className="text-gray-600" />
+                  <X size={20} className="text-gray-600" />
                 </button>
-              </form>
+              </div>
             </div>
           )}
         </div>
