@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 💎 Light Elegant Theme */
+
+@layer base {
+  body {
+    background-color: theme('colors.bg-primary');
+    color: theme('colors.text-primary');
+    font-family: system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-cta text-cta-text px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-footer text-text-primary px-4 py-2 rounded-md hover:bg-opacity-80 transition-colors;
+  }
+
+  .input {
+    @apply bg-input-bg border border-border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-accent;
+  }
+
+  .section {
+    @apply bg-footer p-6 rounded-lg;
+  }
+
+  .heading {
+    @apply text-heading text-2xl font-bold mb-4;
+  }
+
+  .text-highlight {
+    @apply text-accent;
+  }
+
+  .link {
+    @apply text-highlight hover:underline cursor-pointer;
+  }
+
+  .border-custom {
+    @apply border border-border;
+  }
+}
