@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, MessageCircle, Mail, Facebook, Music, PlayCircle} from 'lucide-react';
+import { Instagram, MessageCircle, Mail, Facebook, Music, PlayCircle, ChevronUp } from 'lucide-react';
 
 export function Footer() {
   const scrollToTop = () => {
@@ -8,41 +8,44 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-white border-t border-gray-200">
       {/* Back to top */}
       <div 
         onClick={scrollToTop}
-        className="bg-gray-700 hover:bg-gray-600 py-3 text-center cursor-pointer transition-colors"
+        className="bg-gray-100 hover:bg-gray-200 py-4 text-center cursor-pointer transition-colors border-b border-gray-200"
       >
-        <span className="text-sm">Back to top</span>
+        <div className="flex items-center justify-center text-gray-600 hover:text-gray-800">
+          <ChevronUp size={16} className="mr-1" />
+          <span className="text-sm font-medium">Back to top</span>
+        </div>
       </div>
 
       {/* Main footer content */}
-      <div className="bg-gray-800 py-12">
+      <div className="bg-white py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
             {/* Brand Info */}
-            <div>
+            <div className="lg:col-span-1">
               <div className="flex items-center mb-4">
                 <div className="bg-orange-500 px-3 py-2 rounded mr-3">
                   <span className="text-white font-bold text-xl">Luminvera</span>
                 </div>
               </div>
-              <p className="text-gray-300 text-sm mb-4">
+              <p className="text-gray-600 text-sm mb-6 leading-relaxed">
                 Your trusted global store for everyday essentials.
               </p>
 
               {/* Newsletter */}
-              <div className="mt-6">
-                <h4 className="font-bold text-white mb-3">Newsletter</h4>
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-3">Newsletter</h4>
                 <div className="flex">
                   <input
                     type="email"
                     placeholder="Your email address"
-                    className="flex-1 px-3 py-2 bg-gray-700 text-white rounded-l-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                   />
-                  <button className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-r-md transition-colors">
+                  <button className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-r-md transition-colors text-white text-sm font-medium">
                     Subscribe
                   </button>
                 </div>
@@ -51,31 +54,31 @@ export function Footer() {
 
             {/* Quick Links */}
             <div>
-              <h3 className="font-bold text-white mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/about" className="text-gray-300 hover:text-white">About Us</Link></li>
-                <li><Link to="/contact" className="text-gray-300 hover:text-white">Contact</Link></li>
-                <li><Link to="/faqs" className="text-gray-300 hover:text-white">FAQs</Link></li>
-                <li><Link to="/privacy" className="text-gray-300 hover:text-white">Privacy Policy</Link></li>
-                <li><Link to="/refund" className="text-gray-300 hover:text-white">Refund Policy</Link></li>
+              <h3 className="font-semibold text-gray-800 mb-4">Quick Links</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link to="/about" className="text-gray-600 hover:text-orange-600 transition-colors">About Us</Link></li>
+                <li><Link to="/contact" className="text-gray-600 hover:text-orange-600 transition-colors">Contact</Link></li>
+                <li><Link to="/faqs" className="text-gray-600 hover:text-orange-600 transition-colors">FAQs</Link></li>
+                <li><Link to="/privacy" className="text-gray-600 hover:text-orange-600 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/refund" className="text-gray-600 hover:text-orange-600 transition-colors">Refund Policy</Link></li>
               </ul>
             </div>
 
             {/* Shop Categories */}
             <div>
-              <h3 className="font-bold text-white mb-4">Shop Categories</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/products/home-kitchen" className="text-gray-300 hover:text-white">Home & Kitchen</Link></li>
-                <li><Link to="/products/tech-gadgets" className="text-gray-300 hover:text-white">Tech & Gadgets</Link></li>
-                <li><Link to="/products/fashion-travel" className="text-gray-300 hover:text-white">Fashion & Travel</Link></li>
-                <li><Link to="/products/baby-family" className="text-gray-300 hover:text-white">Baby & Family</Link></li>
-                <li><Link to="/products/health-beauty" className="text-gray-300 hover:text-white">Health & Beauty</Link></li>
+              <h3 className="font-semibold text-gray-800 mb-4">Shop Categories</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link to="/products/home-kitchen" className="text-gray-600 hover:text-orange-600 transition-colors">🏠 Home & Kitchen</Link></li>
+                <li><Link to="/products/tech-gadgets" className="text-gray-600 hover:text-orange-600 transition-colors">🎮 Gadgets & Tech</Link></li>
+                <li><Link to="/products/fashion-travel" className="text-gray-600 hover:text-orange-600 transition-colors">👗 Fashion & Travel</Link></li>
+                <li><Link to="/products/baby-family" className="text-gray-600 hover:text-orange-600 transition-colors">👶 Baby & Kids</Link></li>
+                <li><Link to="/products/health-beauty" className="text-gray-600 hover:text-orange-600 transition-colors">🧴 Health & Beauty</Link></li>
               </ul>
             </div>
 
-            {/* Follow Us */}
+            {/* Follow Us / Contact */}
             <div>
-              <h3 className="font-bold text-white mb-4">Follow Us</h3>
+              <h3 className="font-semibold text-gray-800 mb-4">Follow Us</h3>
               <div className="space-y-3">
 
                 <a 
@@ -83,43 +86,10 @@ export function Footer() {
                   target="_blank" 
                   rel="noopener noreferrer" 
                   aria-label="Visit our Instagram" 
-                  className="flex items-center text-gray-300 hover:text-white"
+                  className="flex items-center text-gray-600 hover:text-pink-600 transition-colors text-sm"
                 >
-                  <Instagram size={20} className="mr-2" />
+                  <Instagram size={18} className="mr-3" />
                   Instagram
-                </a>
-
-                <a 
-                  href="https://wa.me/1234567890" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  aria-label="Chat with us on WhatsApp" 
-                  className="flex items-center text-gray-300 hover:text-white"
-                >
-                  <MessageCircle size={20} className="mr-2" />
-                  WhatsApp
-                </a>
-
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  aria-label="Visit our Facebook" 
-                  className="flex items-center text-gray-300 hover:text-white"
-                >
-                  <Facebook size={20} className="mr-2" />
-                  Facebook
-                </a>
-
-                <a 
-                  href="https://youtube.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  aria-label="Visit our YouTube channel" 
-                  className="flex items-center text-gray-300 hover:text-white"
-                >
-                  <PlayCircle size={20} className="mr-2" />
-                  YouTube
                 </a>
 
                 <a 
@@ -127,18 +97,29 @@ export function Footer() {
                   target="_blank" 
                   rel="noopener noreferrer" 
                   aria-label="Visit our TikTok" 
-                  className="flex items-center text-gray-300 hover:text-white"
+                  className="flex items-center text-gray-600 hover:text-black transition-colors text-sm"
                 >
-                  <Music size={20} className="mr-2" />
+                  <Music size={18} className="mr-3" />
                   TikTok
+                </a>
+
+                <a 
+                  href="https://wa.me/1234567890" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  aria-label="Chat with us on WhatsApp" 
+                  className="flex items-center text-gray-600 hover:text-green-600 transition-colors text-sm"
+                >
+                  <MessageCircle size={18} className="mr-3" />
+                  WhatsApp
                 </a>
 
                 <a 
                   href="mailto:contact@luminvera.com" 
                   aria-label="Email us" 
-                  className="flex items-center text-gray-300 hover:text-white"
+                  className="flex items-center text-gray-600 hover:text-blue-600 transition-colors text-sm"
                 >
-                  <Mail size={20} className="mr-2" />
+                  <Mail size={18} className="mr-3" />
                   contact@luminvera.com
                 </a>
 
@@ -150,9 +131,9 @@ export function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="bg-gray-900 border-t border-gray-700 py-6">
+      <div className="bg-gray-50 border-t border-gray-200 py-4">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-500">
             © 2025 Luminvera. All rights reserved.
           </p>
         </div>

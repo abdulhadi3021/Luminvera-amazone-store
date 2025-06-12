@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HeroBanner } from '../components/home/HeroBanner';
 import { CategorySection } from '../components/home/CategorySection';
+import { NewArrivalsSection } from '../components/home/NewArrivalsSection';
 import { DealsSection } from '../components/home/DealsSection';
 import { RecommendationsSection } from '../components/home/RecommendationsSection';
 import { FeaturedProducts } from '../components/FeaturedProducts';
@@ -12,15 +13,15 @@ export function HomePage() {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   
   const featuredProducts = products.filter(product => product.isFeatured);
-  const newArrivals = products.filter(product => product.isNew);
   
   return (
-    <div className="bg-gray-100">
+    <div className="bg-white">
       <HeroBanner />
       <CategorySection />
+      <NewArrivalsSection />
       <DealsSection />
       
-      <div className="bg-white py-8">
+      <div className="bg-white py-12">
         <FeaturedProducts 
           products={featuredProducts}
           title="Featured Products"
@@ -29,14 +30,6 @@ export function HomePage() {
       </div>
       
       <RecommendationsSection />
-      
-      <div className="bg-white py-8">
-        <FeaturedProducts 
-          products={newArrivals}
-          title="New Arrivals"
-          onQuickView={setQuickViewProduct}
-        />
-      </div>
       
       {quickViewProduct && (
         <QuickViewModal 

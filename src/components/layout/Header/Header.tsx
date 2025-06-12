@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ShoppingCart, MapPin, User, Menu, Globe } from 'lucide-react';
+import { Search, ShoppingCart, MapPin, User, Menu, Globe, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 import { useAuth } from '../../../context/AuthContext';
@@ -11,6 +11,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   
   const { cart } = useCart();
   const { user, signOut } = useAuth();
@@ -30,6 +31,10 @@ export function Header() {
     }
   };
 
+  const toggleSearch = () => {
+    setIsSearchExpanded(!isSearchExpanded);
+  };
+
   return (
     <>
       {/* Top banner */}
@@ -40,33 +45,24 @@ export function Header() {
       </div>
 
       {/* Main header */}
-      <header className="bg-gray-900 text-white sticky top-0 z-50">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4">
-          <div className="flex items-center py-2">
+          <div className="flex items-center py-3">
             
             {/* Logo */}
-            <Link to="/" className="flex items-center mr-6">
+            <Link to="/" className="flex items-center mr-4 md:mr-6">
               <div className="bg-orange-500 px-3 py-2 rounded">
                 <span className="text-white font-bold text-xl">Luminvera</span>
               </div>
             </Link>
 
-            {/* Delivery location */}
-            <div className="hidden md:flex items-center mr-4 cursor-pointer hover:border border-white rounded p-1">
-              <MapPin size={16} className="mr-1" />
-              <div className="text-xs">
-                <div className="text-gray-300">Deliver to</div>
-                <div className="font-bold">Pakistan</div>
-              </div>
-            </div>
-
-            {/* Search bar */}
-            <form onSubmit={handleSearchSubmit} className="flex-1 max-w-3xl mx-4">
-              <div className="flex">
+            {/* Desktop Search Bar */}
+            <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-2xl mr-6">
+              <div className="flex w-full">
                 <select 
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="bg-gray-200 text-gray-800 px-3 py-2 rounded-l-md border-r border-gray-300 text-sm"
+                  className="bg-gray-100 text-gray-700 px-3 py-2 rounded-l-md border border-gray-300 text-sm min-w-[120px]"
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
@@ -75,100 +71,178 @@ export function Header() {
                 <input
                   type="text"
                   placeholder="Search products, categories, or brands..."
-                  className="flex-1 px-4 py-2 text-gray-800 focus:outline-none"
+                  className="flex-1 px-4 py-2 text-gray-800 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <button 
                   type="submit"
-                  className="bg-orange-400 hover:bg-orange-500 px-4 py-2 rounded-r-md"
+                  className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-r-md transition-colors"
                 >
-                  <Search size={20} />
+                  <Search size={20} className="text-white" />
                 </button>
               </div>
             </form>
 
-            {/* Language selector */}
-            <div className="hidden md:flex items-center mr-4 cursor-pointer hover:border border-white rounded p-1">
-              <Globe size={16} className="mr-1" />
-              <span className="text-sm">EN</span>
-            </div>
-
-            {/* Account */}
-            <div 
-              onClick={handleAuthClick}
-              className="hidden md:flex flex-col cursor-pointer hover:border border-white rounded p-1 mr-4"
+            {/* Mobile Search Icon */}
+            <button 
+              onClick={toggleSearch}
+              className="md:hidden mr-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <span className="text-xs">Hello, {user ? user.email?.split('@')[0] : 'Sign in'}</span>
-              <span className="text-sm font-bold">Account & Lists</span>
-            </div>
-
-            {/* Orders */}
-            <div className="hidden md:flex flex-col cursor-pointer hover:border border-white rounded p-1 mr-4">
-              <span className="text-xs">Returns</span>
-              <span className="text-sm font-bold">& Orders</span>
-            </div>
-
-            {/* Cart */}
-            <Link to="/cart" className="flex items-center hover:border border-white rounded p-1">
-              <div className="relative">
-                <ShoppingCart size={24} />
-                {cart.items.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
-                  </span>
-                )}
-              </div>
-              <span className="ml-1 text-sm font-bold">Cart</span>
-            </Link>
-
-            {/* Mobile menu button */}
-            <button className="md:hidden ml-4" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <Menu size={24} />
+              <Search size={20} className="text-gray-600" />
             </button>
+
+            {/* Right side icons */}
+            <div className="flex items-center space-x-2 md:space-x-4 ml-auto">
+              {/* Delivery location - Desktop only */}
+              <div className="hidden lg:flex items-center mr-2 cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors">
+                <MapPin size={16} className="mr-1 text-gray-600" />
+                <div className="text-xs">
+                  <div className="text-gray-500">Deliver to</div>
+                  <div className="font-medium text-gray-800">Pakistan</div>
+                </div>
+              </div>
+
+              {/* Language selector - Desktop only */}
+              <div className="hidden md:flex items-center mr-2 cursor-pointer hover:bg-gray-100 rounded p-2 transition-colors">
+                <Globe size={16} className="mr-1 text-gray-600" />
+                <span className="text-sm text-gray-800">EN</span>
+              </div>
+
+              {/* Account */}
+              <div 
+                onClick={handleAuthClick}
+                className="hidden md:flex flex-col cursor-pointer hover:bg-gray-100 rounded p-2 mr-2 transition-colors"
+              >
+                <span className="text-xs text-gray-500">Hello, {user ? user.email?.split('@')[0] : 'Sign in'}</span>
+                <span className="text-sm font-medium text-gray-800">Account</span>
+              </div>
+
+              {/* Orders - Desktop only */}
+              <div className="hidden lg:flex flex-col cursor-pointer hover:bg-gray-100 rounded p-2 mr-2 transition-colors">
+                <span className="text-xs text-gray-500">Returns</span>
+                <span className="text-sm font-medium text-gray-800">& Orders</span>
+              </div>
+
+              {/* Cart */}
+              <Link to="/cart" className="flex items-center hover:bg-gray-100 rounded p-2 transition-colors">
+                <div className="relative">
+                  <ShoppingCart size={24} className="text-gray-600" />
+                  {cart.items.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                      {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
+                    </span>
+                  )}
+                </div>
+                <span className="ml-1 text-sm font-medium text-gray-800 hidden sm:block">Cart</span>
+              </Link>
+
+              {/* Mobile menu button */}
+              <button 
+                className="md:hidden ml-2 p-2 hover:bg-gray-100 rounded-full transition-colors" 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <Menu size={24} className="text-gray-600" />
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Search Bar - Expandable */}
+          {isSearchExpanded && (
+            <div className="md:hidden pb-3 border-t border-gray-200 pt-3 mt-3">
+              <form onSubmit={handleSearchSubmit} className="flex">
+                <select 
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="bg-gray-100 text-gray-700 px-2 py-2 rounded-l-md border border-gray-300 text-sm"
+                >
+                  {categories.slice(0, 5).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="flex-1 px-3 py-2 text-gray-800 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button 
+                  type="submit"
+                  className="bg-orange-500 hover:bg-orange-600 px-3 py-2 transition-colors"
+                >
+                  <Search size={18} className="text-white" />
+                </button>
+                <button 
+                  type="button"
+                  onClick={toggleSearch}
+                  className="bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-r-md transition-colors"
+                >
+                  <X size={18} className="text-gray-600" />
+                </button>
+              </form>
+            </div>
+          )}
         </div>
 
-        {/* Navigation bar */}
-        <div className="bg-gray-800 border-t border-gray-700">
+        {/* Categories Navigation Bar */}
+        <div className="bg-gray-50 border-t border-gray-200">
           <div className="container mx-auto px-4">
-            <nav className="flex items-center py-2 space-x-6 text-sm overflow-x-auto">
-              <Link to="/products" className="hover:text-orange-400 flex items-center whitespace-nowrap">
-                <Menu size={16} className="mr-1" />
-                All
-              </Link>
-              {MAIN_CATEGORIES.slice(1, 6).map(category => (
+            <nav className="flex items-center py-2 overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-1 md:space-x-2 min-w-max">
                 <Link 
-                  key={category.id}
-                  to={`/products/${category.id}`} 
-                  className="hover:text-orange-400 whitespace-nowrap"
+                  to="/products" 
+                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-orange-600 hover:bg-white rounded-full transition-all duration-200 whitespace-nowrap"
                 >
-                  {category.label}
+                  <Menu size={14} className="mr-1" />
+                  All
                 </Link>
-              ))}
-              <Link to="/deals" className="hover:text-orange-400 whitespace-nowrap">Today's Deals</Link>
-              <Link to="/customer-service" className="hover:text-orange-400 whitespace-nowrap">Customer Service</Link>
+                {MAIN_CATEGORIES.slice(1, 8).map(category => (
+                  <Link 
+                    key={category.id}
+                    to={`/products/${category.id}`} 
+                    className="px-3 py-2 text-sm text-gray-600 hover:text-orange-600 hover:bg-white rounded-full transition-all duration-200 whitespace-nowrap"
+                  >
+                    <span className="mr-1">{category.icon}</span>
+                    {category.label}
+                  </Link>
+                ))}
+                <Link 
+                  to="/deals" 
+                  className="px-3 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-white rounded-full transition-all duration-200 whitespace-nowrap font-medium"
+                >
+                  Today's Deals
+                </Link>
+              </div>
             </nav>
           </div>
         </div>
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-gray-800 border-t border-gray-700">
-            <nav className="px-4 py-4 space-y-2">
-              <Link to="/products" className="block py-2 hover:text-orange-400">All Products</Link>
-              {MAIN_CATEGORIES.slice(1).map(category => (
+          <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
+            <nav className="px-4 py-4 space-y-3">
+              <div onClick={handleAuthClick} className="flex items-center py-2 text-gray-800 hover:text-orange-600 cursor-pointer">
+                <User size={18} className="mr-3" />
+                {user ? 'Sign Out' : 'Sign In'}
+              </div>
+              <Link to="/products" className="flex items-center py-2 text-gray-800 hover:text-orange-600">
+                <Menu size={18} className="mr-3" />
+                All Products
+              </Link>
+              {MAIN_CATEGORIES.slice(1, 6).map(category => (
                 <Link 
                   key={category.id}
                   to={`/products/${category.id}`} 
-                  className="block py-2 hover:text-orange-400"
+                  className="flex items-center py-2 text-gray-800 hover:text-orange-600"
                 >
-                  {category.icon} {category.label}
+                  <span className="mr-3 text-lg">{category.icon}</span>
+                  {category.label}
                 </Link>
               ))}
-              <div onClick={handleAuthClick} className="block py-2 hover:text-orange-400 cursor-pointer">
-                {user ? 'Sign Out' : 'Sign In'}
-              </div>
+              <Link to="/deals" className="flex items-center py-2 text-red-600 hover:text-red-700 font-medium">
+                🔥 Today's Deals
+              </Link>
             </nav>
           </div>
         )}
